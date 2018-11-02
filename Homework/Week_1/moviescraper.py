@@ -27,6 +27,9 @@ def extract_movies(dom):
     - Runtime (only a number!)
     """
 
+    movie_list = dom.find_all('div', class_= "lister-item-content")
+    print(len(movie_list))
+    print(movie_list[0])
     # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
     # HIGHEST RATED MOVIES
     # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
