@@ -18,12 +18,12 @@ data_dict = {str(key): [] for key in range(START_YEAR, END_YEAR)}
 
 if __name__ == "__main__":
 
-    # read the csv file, line by line, skipping first line(indeces)
+    # read the csv file, line by line, skipping first line(indices)
     with open(INPUT_CSV, newline='') as csvfile:
         file = csv.reader(csvfile, delimiter = ',')
         next(file)
 
-        # Add the rating to the year the movie was released
+        # Add the ratings to the year the movies were released
         for row in file:
             data_dict[row[-1]].append(float(row[1]))
 
@@ -35,7 +35,7 @@ for k, v in data_dict.items():
 # Save keys and values in lists to create plot
 years = list(data_dict.keys())
 
-# Make a list of the average rating per year to plot in the graph
+# Make a list of the average rating in total to also plot as a reference
 average_year = [sum(average_list)/len(average_list)] * len(average_list)
 
 # Create plot with average rating per year and the total average
@@ -99,8 +99,14 @@ for k,v in data_dict.items():
 
 average_entries = [sum(entries_list)/len(years)] * len(years)
 
+# Make a bar plot or the amount of entries per year
 plt.bar(years, entries_list)
 plt.ylabel('Entries in top 50')
 plt.xlabel('Year')
 plt.title('Amount of entries in top 50 per year')
 plt.show()
+
+# The final graphh shows an indication that in more recent years, more Movies
+# are in this list. This explains there high cumulative score. This may be a
+# result of some kind of bias or the hypothesis that there are just more good
+# movies from recent years. 

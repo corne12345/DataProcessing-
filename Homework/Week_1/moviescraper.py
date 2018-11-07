@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# Name:
-# Student number:
+# Name: Corné Heijnen
+# Student number: 12230170
 """
 This script scrapes IMDB and outputs a CSV file with highest rated movies.
 """
@@ -30,13 +30,15 @@ def extract_movies(dom):
 
     # Create a list of individual movies by cutting at the start of each movie
     movie_list = dom.find_all('div', class_= "lister-item-content")
+
+    # Create lists to store all titles, ratings, years, actors and runtimes
     titles = []
     ratings = []
     years = []
     actors = []
     runtimes = []
 
-    # loop through the movie lit ot repeat tasks for each movie
+    # loop through the movie list o repeat tasks for each movie
     for i in range(len(movie_list)):
 
         # Isolate title by searching for returning text within anchor tag
@@ -49,7 +51,7 @@ def extract_movies(dom):
         rating = float(rating.lstrip())
         ratings.append(rating)
 
-        # Isolate year of release by its name and strip braces
+        # Isolate year of release by its name and leave out braces by selecting substring
         year = movie_list[i].find('span', class_ = 'lister-item-year text-muted unbold').text
         year = int(year [-5:-1])
         years.append(year)
@@ -63,7 +65,7 @@ def extract_movies(dom):
             actor = "No actors mentioned"
         actors.append(actor)
 
-        # Isolate Runtime
+        # Isolate Runtime and get rid of ' min' by using replace
         runtime = movie_list[i].find('span', class_ = 'runtime').text
         runtime = int(runtime.replace(' min', ''))
         runtimes.append(runtime)
@@ -72,18 +74,16 @@ def extract_movies(dom):
     movies = pd.DataFrame({'Title': titles, 'Rating': ratings, 'Year': years, 'Actors': actors, 'Runtime': runtimes})
     print(movies.info())
     print(movies.head)
-    return movies   # REPLACE THIS LINE AS WELL IF APPROPRIATE
+    return movies
 
 
 def save_csv(outfile, movies):
     """
     Output a CSV file containing highest rated movies.
     """
-    # writer = csv.writer(outfile)
-    # writer.writerow(['Title', 'Rating', 'Year', 'Actors', 'Runtime'])
-    movies.to_csv(outfile, index = False)
 
-    # ADD SOME CODE OF YOURSELF HERE TO WRITE THE MOVIES TO DISK
+    # Create a csv file of the dataframe using to_csv method
+    movies.to_csv(outfile, index = False)
 
 
 def simple_get(url):
