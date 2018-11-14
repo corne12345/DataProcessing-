@@ -184,17 +184,25 @@ if __name__ == "__main__":
     # therefore no reason to leave out the results in the analysis.
 
 
+    """
+    Not yet finalised
+    """
+
+    scatter = df.plot.scatter('GDP', 'Birth Rates', label='all countries')
+    scatter.set_title('GDP vs Birth Rate for all countries')
+    plt.show()
+
     # Lately, there have been numerous reports about declining birth rate in
     # developed countries. It would therefore be an interesting plot to make a
     # scatter plot plotting GDP and birth_rate and color points based on region
 
-    fig = plt.figure()
-    ax1 = fig.add_subplot()
-
-    df_asia = df[ df['Regions'] == 'ASIA (EX. NEAR EAST)']
-    ax = df.plot.scatter(df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['GDP']], df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['Birth Rates']], label=='Asia')
-    df_baltics = df[ df['Regions'] == 'BALTICS']
-    df_baltics.plot.scatter('GDP', 'Birth Rates', label='Baltics')
-    # df_cwofindstates = df[ df['Regions'] == 'C.W. OF IND. STATES']
-    # scatter = df_cwofindstates.plot.scatter('GDP', 'Birth Rates', label='CW Ind States')
-    plt.show()
+    # fig = plt.figure()
+    # ax1 = fig.add_subplot()
+    #
+    # df_asia = df[ df['Regions'] == 'ASIA (EX. NEAR EAST)']
+    # ax = df.plot.scatter(df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['GDP']], df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['Birth Rates']], label=='Asia')
+    # df_baltics = df[ df['Regions'] == 'BALTICS']
+    # df_baltics.plot.scatter('GDP', 'Birth Rates', label='Baltics')
+    # # df_cwofindstates = df[ df['Regions'] == 'C.W. OF IND. STATES']
+    # # scatter = df_cwofindstates.plot.scatter('GDP', 'Birth Rates', label='CW Ind States')
+    # plt.show()
