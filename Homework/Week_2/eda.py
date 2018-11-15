@@ -142,6 +142,34 @@ def save_to_json (df):
     df_json = df_json.set_index('Countries')
     df_json.to_json('Output.json', orient='index')
 
+def make_scatter (df):
+        df_asia = df[ df['Regions'] == 'ASIA (EX. NEAR EAST)']
+        plt.scatter(df_asia['GDP'], df_asia['Birth Rates'], label="Asia")
+        df_baltics = df[ df['Regions'] == 'BALTICS']
+        plt.scatter(df_baltics['GDP'], df_baltics['Birth Rates'], label="Baltics")
+        df_cwofindstates = df[ df['Regions'] == 'C.W. OF IND. STATES']
+        plt.scatter(df_cwofindstates['GDP'], df_cwofindstates['Birth Rates'], label="Commonwealth of Independent States")
+        df_easteur = df[df['Regions'] == 'EASTERN EUROPE']
+        plt.scatter(df_easteur['GDP'], df_easteur['Birth Rates'], label='Eastern Europe')
+        df_latin  = df[df['Regions'] == 'LATIN AMER. & CARIB']
+        plt.scatter(df_latin['GDP'], df_latin['Birth Rates'], label='Latin America')
+        df_neareast = df[df['Regions'] == 'NEAR EAST']
+        plt.scatter(df_neareast['GDP'], df_neareast['Birth Rates'], label='Near East')
+        df_nafrica = df[df['Regions'] == 'NORTHERN AFRICA']
+        plt.scatter(df_nafrica['GDP'], df_nafrica['Birth Rates'], label='Northern Africa')
+        df_america = df[df['Regions'] == 'NORTHERN AMERICA']
+        plt.scatter(df_america['GDP'], df_america['Birth Rates'], label='Northern America')
+        df_oceania = df[df['Regions'] == 'OCEANIA']
+        plt.scatter(df_oceania['GDP'], df_oceania['Birth Rates'], label='Oceania')
+        df_ssafrica = df[df['Regions'] == 'SUB-SAHARAN AFRICA']
+        plt.scatter(df_ssafrica['GDP'], df_ssafrica['Birth Rates'], label='Southern Africa')
+        df_westeur = df[df['Regions'] == 'WESTERN EUROPE']
+        plt.scatter(df_westeur['GDP'], df_westeur['Birth Rates'], label='Western Europe', c='yellow')
+        plt.title('GDP vs Birth Rate for all countries')
+        plt.xlabel('GDP per capita ($)')
+        plt.ylabel('Birth rate (per 1000)')
+        plt.legend(loc='upper right')
+        plt.show()
 
 if __name__ == "__main__":
     a, b, c, d, e, f = clean_input(INPUT_FILE)
@@ -183,26 +211,13 @@ if __name__ == "__main__":
     # are rather high, but probably no wrong values. In my opinion, there is
     # therefore no reason to leave out the results in the analysis.
 
-
-    """
-    Not yet finalised
-    """
-
-    scatter = df.plot.scatter('GDP', 'Birth Rates', label='all countries')
-    scatter.set_title('GDP vs Birth Rate for all countries')
-    plt.show()
-
     # Lately, there have been numerous reports about declining birth rate in
     # developed countries. It would therefore be an interesting plot to make a
     # scatter plot plotting GDP and birth_rate and color points based on region
+    make_scatter(df)
 
-    # fig = plt.figure()
-    # ax1 = fig.add_subplot()
-    #
-    # df_asia = df[ df['Regions'] == 'ASIA (EX. NEAR EAST)']
-    # ax = df.plot.scatter(df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['GDP']], df[ df['Regions'] == 'ASIA (EX. NEAR EAST)'['Birth Rates']], label=='Asia')
-    # df_baltics = df[ df['Regions'] == 'BALTICS']
-    # df_baltics.plot.scatter('GDP', 'Birth Rates', label='Baltics')
-    # # df_cwofindstates = df[ df['Regions'] == 'C.W. OF IND. STATES']
-    # # scatter = df_cwofindstates.plot.scatter('GDP', 'Birth Rates', label='CW Ind States')
-    # plt.show()
+    #  The scatter clearly shows a negative correlation between GDP and birth rate
+    # indicating more developed countries reproduce less. This is partly because
+    # the infant mortality is almost zero, so a born baby will be likely to
+    # survive. It also clusters the different regions in the same parts of the
+    # graph, indicating the coloring by regions is a descriptive function.
