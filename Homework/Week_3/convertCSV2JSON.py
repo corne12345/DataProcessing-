@@ -22,3 +22,5 @@ print(maastricht)
 rows = [vlieland, vlissingen, maastricht]
 with open("test.json", "w") as f:
     json.dump(rows,f)
+
+print(rows[0])
