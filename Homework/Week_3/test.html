@@ -154,6 +154,8 @@
             ctx.fillText(4.45, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4  * 3 + GRAPH_TOP + 3);
             ctx.fillText(13.35, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4 + GRAPH_TOP + 3);
             ctx.fillText(8.9, GRAPH_RIGHT + 5, GRAPH_HEIGHT/2 + GRAPH_TOP + 3);
+            ctx.textAlign = "center";
+            ctx.fillText("Months", GRAPH_WIDTH/2 + GRAPH_LEFT, GRAPH_BOTTOM + 40);
 
           function createTransform(domain, range, x){
             // domain is a two-element array of the data bounds [domain_min, domain_max]
