@@ -35,13 +35,14 @@
           ctx.stroke();
         }
 
-        function createScaleLine(ctx, float){
+        function createScaleLine(ctx, float, maxRange){
           // This function creates horizontal background lines
           ctx.beginPath();
           ctx.strokeStyle = "#BBB";
           ctx.moveTo(GRAPH_LEFT, GRAPH_HEIGHT * float + GRAPH_TOP );
           ctx.lineTo(GRAPH_RIGHT, GRAPH_HEIGHT * float + GRAPH_TOP);
           ctx.stroke();
+          ctx.fillText(maxRange * float, GRAPH_RIGHT + 5, GRAPH_HEIGHT * (1- float) + GRAPH_TOP + 3);
         }
 
         function createLine(ctx, dates_new, winds, maxRange, color){
@@ -99,10 +100,13 @@
             drawAxes(ctx);
             createLine(ctx, dates_new, vlie, maxRange, "blue");
             createLine(ctx, dates_new, maas, maxRange, "red");
-            createScaleLine(ctx, 0);
-            createScaleLine(ctx, 0.25);
-            createScaleLine(ctx, 0.5);
-            createScaleLine(ctx, 0.75);
+            createScaleLine(ctx, 0, maxRange);
+            createScaleLine(ctx, 0.25, maxRange);
+            createScaleLine(ctx, 0.5, maxRange);
+            createScaleLine(ctx, 0.75, maxRange);
+            createScaleLine(ctx, 1, maxRange);
+
+
 
             // Create legend in color to refer to both lines
             ctx.fillStyle = "blue";
@@ -135,12 +139,7 @@
             ctx.fillText("Average wind speed m/s", 250, -525);
             ctx.restore();
 
-            // Create ylabel scale
-            ctx.textAlign = "left";
-            ctx.fillText(17.8, GRAPH_RIGHT + 5, GRAPH_TOP + 3);
-            ctx.fillText(4.45, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4  * 3 + GRAPH_TOP + 3);
-            ctx.fillText(13.35, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4 + GRAPH_TOP + 3);
-            ctx.fillText(8.9, GRAPH_RIGHT + 5, GRAPH_HEIGHT/2 + GRAPH_TOP + 3);
+            // Create horizontal axis title
             ctx.textAlign = "center";
             ctx.fillText("Months", GRAPH_WIDTH/2 + GRAPH_LEFT, GRAPH_BOTTOM + 40);
             }
