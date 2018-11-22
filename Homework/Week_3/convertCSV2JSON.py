@@ -1,10 +1,16 @@
+"""
+
+
+Chose to compare two weather stations in stead of 3 later on. This means the input
+file is bigger and contains unnecessary data.
+"""
+
 import csv
 import json
 
-
 vlieland = []
-vlissingen = []
 maastricht = []
+dates = []
 with open("wind.csv", newline='') as csvfile:
     file = csv.reader(csvfile, delimiter=',')
     for row in file:
@@ -12,15 +18,13 @@ with open("wind.csv", newline='') as csvfile:
             row[0] = row[0].lstrip()
             row[2] = row[2].lstrip()
             if row[0] == "242":
-                vlieland.append(row[1:])
-            elif row[0] == "310":
-                vlissingen.append(row[1:])
+                vlieland.append(row[2])
+                dates.append(row[1])
             elif row[0] == "380":
-                maastricht.append(row[1:])
+                maastricht.append(row[2])
+winds = list(zip(vlieland, maastricht))
+wind_dict = dict(zip(dates, winds))
+print(wind_dict)
 
-print(maastricht)
-rows = [vlieland, vlissingen, maastricht]
-with open("test.json", "w") as f:
-    json.dump(rows,f)
-
-print(rows[0])
+with open("data.json", "w") as f:
+    json.dump(wind_dict,f)

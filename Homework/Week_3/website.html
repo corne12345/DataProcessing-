@@ -1,0 +1,95 @@
+<!-- Corné Heijnen
+     12230170
+     This HTML file is used to display a line graph for the UvA course DataProcessing. -->
+
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8"/>
+        <title>Line Graph of Wind</title>
+      <style type="text/css">
+        canvas { border:1px solid black; }
+      </style>
+    </head>
+
+    <body>
+      <h2> Line Graph of Dutch wind in 2017 </h2>
+      <h4> by Corne Heijnen (12230170) </h4>
+
+      <canvas id="Result" width="500" height="500"> </canvas>
+      <script type ="application/javascript">
+
+        var rows = [];
+        var dates_new = []
+        var fileName = "data.json";
+        var txtFile = new XMLHttpRequest();
+        txtFile.onreadystatechange = function() {
+          if (txtFile.readyState === 4 && txtFile.status == 200) {
+            console.log(JSON.parse(txtFile.responseText));
+            rows = JSON.parse(txtFile.responseText);
+
+            // Select array dates as the keys of rows
+            var dates = Object.keys(rows);
+
+            // loop over all dates and transform them into milliseconds and back in days
+            dates.forEach(function(element) {
+              var years = element.slice(0,4);
+              var months = element.slice(4,6);
+              var days = element.slice(6,8)
+              var d = new Date(years, months, days);
+              d = d.getTime();
+              d = Math.round(((d-1485903600000)/86400000) + 1);
+              dates_new.push(d)
+          })
+            };
+            // Calculate range and domain
+            winds = Object.values(rows[0]);
+            var windmax = Math.max(...winds);
+            var windmin = Math.min(...winds);
+            var datemin = Math.min(...dates_new);
+            var datemax = Math.max(...dates_new);
+            range = [windmin, windmax];
+            domain = [datemin, datemax];
+            console.log(range);
+          }
+          txtFile.open("GET", fileName);
+          txtFile.send();
+
+          var canvas = document.getElementById('Result');
+          var ctx = canvas.getContext("2d")
+
+          yCoordinates = []
+          var yCoordinate;
+          ctx.fillRect(10,10,50,50);
+          for (var i = 0; i < 365; i++){
+            yCoordinate = createTransform(domain, range, winds[i]);
+            yCoordinates.push(yCoordinate);
+          }
+          console.log(yCoordinates);
+          // Start building
+
+          // var transform = createTransform(domain, range, dates_new[0]);
+          function createTransform(domain, range, x){
+            // domain is a two-element array of the data bounds [domain_min, domain_max]
+            // range is a two-element array of the screen bounds [range_min, range_max]
+            // this gives you two equations to solve:
+            // range_min = alpha * domain_min + beta
+            // range_max = alpha * domain_max + beta
+            // a solution would be:
+            var domain_min = domain[0]
+            var domain_max = domain[1]
+            var range_min = range[0]
+            var range_max = range[1]
+
+            // formulas to calculate the alpha and the beta
+            var alpha = (range_max - range_min) / (domain_max - domain_min)
+            var beta = range_max - alpha * domain_max
+
+            // returns the function for the linear transformation (y= a * x + b)
+            return (alpha * x  + beta);
+
+            }
+      </script>
+
+    </body>
+</html>

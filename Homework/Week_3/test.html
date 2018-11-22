@@ -1,0 +1,183 @@
+<!-- Corné Heijnen
+     12230170
+     This HTML file is used to display a line graph for the UvA course DataProcessing. -->
+
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8"/>
+        <title>Line Graph of Wind</title>
+    </head>
+
+    <body>
+      <h2> Line Graph of Dutch wind in 2017 </h2>
+      <h4> by Corne Heijnen (12230170) </h4>
+
+      <canvas id="Result" width="550" height="450"> </canvas>
+      <script type ="application/javascript">
+
+
+        var fileName = "data.json";
+        var txtFile = new XMLHttpRequest();
+        txtFile.onreadystatechange = function() {
+          if (txtFile.readyState === 4 && txtFile.status == 200) {
+            console.log(JSON.parse(txtFile.responseText));
+            rows = JSON.parse(txtFile.responseText);
+
+            // Select array dates as the keys of rows
+            var rows, dates_new = [];
+            var dates = Object.keys(rows);
+            // loop over all dates and transform them into milliseconds and back in days
+            dates.forEach(function(element) {
+              var years = element.slice(0,4);
+              var months = element.slice(4,6);
+              var days = element.slice(6,8)
+              var d = new Date(years, months, days);
+              d = d.getTime();
+              d = Math.round(((d-1485903600000)/86400000) + 1);
+              dates_new.push(d)
+          })
+            };
+            // Calculate range and domain
+            var winds = Object.values(rows);
+            var vlie = [];
+            var maas = [];
+            winds.forEach(function(element){
+              var vlieS = element[0];
+              var maasS = element[1];
+              vlie.push(vlieS);
+              maas.push(maasS);
+            })
+
+            // Create canvas
+            var canvas = document.getElementById('Result');
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(-1000, -1000, 2000, 2000);
+
+            // declare graph start and end
+            var GRAPH_TOP = 25;
+            var GRAPH_BOTTOM = 375;
+            var GRAPH_LEFT = 25;
+            var GRAPH_RIGHT = 475;
+            var GRAPH_HEIGHT = 350;
+            var GRAPH_WIDTH = 450;
+
+            // draw axes
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.moveTo(GRAPH_LEFT, GRAPH_BOTTOM);
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_BOTTOM);
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_TOP);
+            ctx.stroke();
+
+            // create line for Vlieland
+            var arrayLen = dates_new.length;
+            console.log(arrayLen);
+            var largest = Math.max(Math.max(...vlie), Math.max(...maas));
+            ctx.beginPath();
+            ctx.strokeStyle = "blue";
+            ctx.moveTo(GRAPH_LEFT, (GRAPH_HEIGHT - vlie[0] / largest * GRAPH_HEIGHT) + GRAPH_TOP);
+            for (var i = 1; i < arrayLen; i++){
+              ctx.lineTo( GRAPH_WIDTH / arrayLen * i + GRAPH_LEFT, ( GRAPH_HEIGHT - vlie[ i ] / largest * GRAPH_HEIGHT ) + GRAPH_TOP );
+            }
+            ctx.stroke();
+            ctx.fillStyle = "blue";
+            ctx.fillText("Vlieland", 150, 60);
+
+            // create line for Maastricht
+            var arrayLen = dates_new.length;
+            console.log(arrayLen);
+            largest = Math.max(...vlie);
+            ctx.beginPath();
+            ctx.strokeStyle = "red";
+            ctx.moveTo(GRAPH_LEFT, (GRAPH_HEIGHT - maas[0] / largest * GRAPH_HEIGHT) + GRAPH_TOP);
+            for (var i = 1; i < arrayLen; i++){
+              ctx.lineTo( GRAPH_WIDTH / arrayLen * i + GRAPH_LEFT, ( GRAPH_HEIGHT - maas[ i ] / largest * GRAPH_HEIGHT ) + GRAPH_TOP );
+            }
+            ctx.stroke();
+            ctx.fillStyle = "red";
+            ctx.fillText("Maastricht", 150, 80);
+
+            // Max line
+            ctx.beginPath();
+            ctx.strokeStyle = "#BBB";
+            ctx.moveTo(GRAPH_LEFT, GRAPH_TOP);
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_TOP);
+            ctx.stroke();
+
+            // Halfway line on x axis
+            ctx.beginPath();
+            ctx.strokeStyle = "#BBB";
+            ctx.moveTo(GRAPH_LEFT, GRAPH_HEIGHT/2 + GRAPH_TOP );
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_HEIGHT/2 + GRAPH_TOP);
+            ctx.stroke();
+
+            // 3/4 line on y axis
+            ctx.beginPath();
+            ctx.strokeStyle = "#BBB";
+            ctx.moveTo(GRAPH_LEFT, GRAPH_HEIGHT/4 + GRAPH_TOP );
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_HEIGHT/4 + GRAPH_TOP);
+            ctx.stroke();
+
+            // 1/4 line on y axis
+            ctx.beginPath();
+            ctx.strokeStyle = "#BBB";
+            ctx.moveTo(GRAPH_LEFT, GRAPH_HEIGHT/4 * 3 + GRAPH_TOP );
+            ctx.lineTo(GRAPH_RIGHT, GRAPH_HEIGHT/4 * 3 + GRAPH_TOP);
+            ctx.stroke();
+
+            var dayCounter = 0;
+            var calender = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            ctx.strokeStyle = "#BBB";
+
+            ctx.fillStyle = "black";
+            for(var i = 0; i < 12; i++){
+              ctx.beginPath();
+              ctx.moveTo(GRAPH_WIDTH/365 * dayCounter + GRAPH_LEFT, GRAPH_TOP);
+              ctx.lineTo(GRAPH_WIDTH/365 * dayCounter + GRAPH_LEFT, GRAPH_BOTTOM);
+              ctx.stroke();
+              dayCounter += calender[i];
+              ctx.textAlign = "right";
+              ctx.fillText("1"+months[i], GRAPH_WIDTH/365 * dayCounter, GRAPH_BOTTOM + 15 )
+            }
+
+            // Create  labels
+            ctx.save();
+            ctx.rotate(Math.PI/2);
+            ctx.fillText("Average wind speed m/s", 250, -525);
+            ctx.restore();
+
+            ctx.textAlign = "left";
+            ctx.fillText(17.8, GRAPH_RIGHT + 5, GRAPH_TOP + 3);
+            ctx.fillText(4.45, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4  * 3 + GRAPH_TOP + 3);
+            ctx.fillText(13.35, GRAPH_RIGHT + 5, GRAPH_HEIGHT/4 + GRAPH_TOP + 3);
+            ctx.fillText(8.9, GRAPH_RIGHT + 5, GRAPH_HEIGHT/2 + GRAPH_TOP + 3);
+
+          function createTransform(domain, range, x){
+            // domain is a two-element array of the data bounds [domain_min, domain_max]
+            // range is a two-element array of the screen bounds [range_min, range_max]
+            // this gives you two equations to solve:
+            // range_min = alpha * domain_min + beta
+            // range_max = alpha * domain_max + beta
+            // a solution would be:
+            var domain_min = domain[0]
+            var domain_max = domain[1]
+            var range_min = range[0]
+            var range_max = range[1]
+
+            // formulas to calculate the alpha and the beta
+            var alpha = (range_max - range_min) / (domain_max - domain_min)
+            var beta = range_max - alpha * domain_max
+
+            // returns the function for the linear transformation (y= a * x + b)
+            return (alpha * x  + beta);
+
+            }
+          }
+          txtFile.open("GET", fileName);
+          txtFile.send();
+      </script>
+
+    </body>
+</html>
