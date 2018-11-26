@@ -15,26 +15,74 @@
             var txtFile = new XMLHttpRequest();
             txtFile.onreadystatechange = function() {
                 if (txtFile.readyState === 4 && txtFile.status == 200) {
+
+                    // Save all data in variable rows and select subset
                     rows = JSON.parse(txtFile.responseText);
-                    console.log(JSON.parse(txtFile.responseText));
+                    rows = rows.slice(124,171);
 
-                    // Temporary rows
-                    // rows = [5, 10, 15, 20, 25, 30];
-                    rows = rows.slice(116,171);
+                    // Loop over rows to get list of values to calculate max
+                    var values = Object.values(rows);
+                    var values_inpt = [];
+                    var years = [];
+                    values.forEach(function(element){
+                      var value = Object.values(element);
+                      var year = value[5];
+                      var value = value[6];
+                      values_inpt.push(value);
+                      years.push(year);
+                    })
 
-                    d3.select("body").append("h1").text("Title of graph").attr("class", "title");
+                    // Set constants for layout of bar graph
+                    const HEIGHT = 550;
+                    const WIDTH = 1000;
+                    const PADDING_LEFT = 40;
+                    const PADDING_DOWN = 30;
+                    const BARPADDING = 1;
+                    var MAX = Math.max(... values_inpt);
+
+                    d3.select("body").append("h1").text("The Amount of Renewable Energy in Belgium from 1960 to 2016").attr("class", "title");
                     d3.select("body").append("h3").text("By Corné Heijnen (12230170)").attr("class", "subtitle");
                     d3.select("body").append("p").text("This bar graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members.").attr("class", "text");
 
-                    d3.select("body") //Select body to work in
-                      .selectAll("div") // Select all paragrahs
-                      .data(rows) // Use rows as datafile
-                      .enter()
-                      .append("div") // Create as many paragraphs as length of rows
-                      // .text(function(d) { return Object.values(d)[0] + "\t" + Object.values(d)[5] + "\t" +  Object.values(d)[6]; }) // write the Value column in each paragraph
-                      // .style("color", function(d) { if (Object.values(d)[6] < 6000) {return "red";} else {return "black";}})
-                      .attr("class", "bar")
-                      .style("height", function(d) {return Object.values(d)[6]/10 + "px";});
+                    // Create SVG
+                    var svg = d3.select("body").append("svg").attr("width", WIDTH).attr("height", HEIGHT);
+
+                    // Create variable for shapess
+                    var rects = svg.selectAll("rect").data(rows).enter().append("rect");
+
+                    // Make shapes by calculating x, y, height and width
+                    rects.attr("x", function(d,i){
+                          return i * (WIDTH-PADDING_LEFT)/rows.length + PADDING_LEFT;
+                         })
+                         .attr("y", function(d){
+                           return (HEIGHT-PADDING_DOWN) - Object.values(d)[6]/MAX * (HEIGHT-PADDING_DOWN);
+                         })
+                         .attr("width", (WIDTH-PADDING_LEFT)/rows.length - BARPADDING)
+                         .attr("height", function(d){
+                           return Object.values(d)[6]/MAX * (HEIGHT-PADDING_DOWN);
+                         })
+                         .attr("fill", "teal");
+
+                    var xScale = d3.scaleLinear()
+                                         .domain([d3.min(years), d3.max(years)])
+                                         .range([PADDING_LEFT, WIDTH]);
+
+                    var yScale = d3.scaleLinear()
+                                         .domain([MAX, 0])
+                                         .range([PADDING_DOWN,HEIGHT]);
+
+                    var xAxis = d3.axisBottom(xScale);
+                    var yAxis = d3.axisLeft(yScale);
+
+                    svg.append("g")
+                       .attr("transform", "translate(0," + (HEIGHT - PADDING_DOWN) + ")")
+                       .call(xAxis);
+                    svg.append("g")
+                       .attr("transform", "translate(" + PADDING_LEFT + ",-30)")
+                       .call(yAxis);
+
+              // Make graph interactive
+
           }
         }
         txtFile.open("GET", fileName);
@@ -42,3 +90,5 @@
         </script>
     </body>
 </html>
+
+<rect x="0" y="0" width="500" height="50"/>
