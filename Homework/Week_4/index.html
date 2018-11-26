@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="d3/d3.js">
+          // Still need to use d3 to select page title
+        </script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <script type="text/javascript">
+            // import and pare json file
+            var fileName = "data.json";
+            var txtFile = new XMLHttpRequest();
+            txtFile.onreadystatechange = function() {
+                if (txtFile.readyState === 4 && txtFile.status == 200) {
+                    rows = JSON.parse(txtFile.responseText);
+                    console.log(JSON.parse(txtFile.responseText));
+
+                    // Temporary rows
+                    // rows = [5, 10, 15, 20, 25, 30];
+                    rows = rows.slice(116,171);
+
+                    d3.select("body").append("h1").text("Title of graph").attr("class", "title");
+                    d3.select("body").append("h3").text("By Corné Heijnen (12230170)").attr("class", "subtitle");
+                    d3.select("body").append("p").text("This bar graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members.").attr("class", "text");
+
+                    d3.select("body") //Select body to work in
+                      .selectAll("div") // Select all paragrahs
+                      .data(rows) // Use rows as datafile
+                      .enter()
+                      .append("div") // Create as many paragraphs as length of rows
+                      // .text(function(d) { return Object.values(d)[0] + "\t" + Object.values(d)[5] + "\t" +  Object.values(d)[6]; }) // write the Value column in each paragraph
+                      // .style("color", function(d) { if (Object.values(d)[6] < 6000) {return "red";} else {return "black";}})
+                      .attr("class", "bar")
+                      .style("height", function(d) {return Object.values(d)[6]/10 + "px";});
+          }
+        }
+        txtFile.open("GET", fileName);
+        txtFile.send();
+        </script>
+    </body>
+</html>

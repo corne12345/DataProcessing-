@@ -24,7 +24,6 @@ with open("wind.csv", newline='') as csvfile:
                 maastricht.append(row[2])
 winds = list(zip(vlieland, maastricht))
 wind_dict = dict(zip(dates, winds))
-print(wind_dict)
 
 with open("data.json", "w") as f:
     json.dump(wind_dict,f)
