@@ -53,10 +53,22 @@
         <script type="text/javascript">
 
             // Set title of webpage and create text
-            d3.select("head").append("title").text("Bar Chart");
-            d3.select("body").append("h1").text("The Amount of Renewable Energy in Belgium from 1960 to 2016").attr("class", "title");
-            d3.select("body").append("h3").text("By Corné Heijnen (12230170)").attr("class", "subtitle");
-            d3.select("body").append("p").text("Thi graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members. This graph shows the evolution of percentual use of renewable energy as part of the total energy production.").attr("class", "text");
+            d3.select("head")
+              .append("title")
+              .text("Bar Chart");
+
+            d3.select("body")
+              .append("h1")
+              .text("The Amount of Renewable Energy in Belgium from 1960 to 2016").attr("class", "title");
+
+            d3.select("body")
+              .append("h3")
+              .text("By Corné Heijnen (12230170)")
+              .attr("class", "subtitle");
+
+            d3.select("body")
+              .append("p").
+              text("Thi graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members. This graph shows the evolution of percentual use of renewable energy as part of the total energy production.").attr("class", "text");
 
             // import and pare json file
             var fileName = "data.json";
@@ -90,9 +102,21 @@
                     var MAX = Math.max(... values_inpt);
 
                     // Create SVG, bars and tip
-                    var svg = d3.select("body").append("svg").attr("width", WIDTH).attr("height", HEIGHT);
-                    var rects = svg.selectAll("rect").data(rows).enter().append("rect").attr("class", "bar");
-                    tip = d3.tip().attr('class', 'd3-tip').html(function(d){return Object.values(d)[6] + "%"});
+                    var svg = d3.select("body")
+                                .append("svg")
+                                .attr("width", WIDTH)
+                                .attr("height", HEIGHT);
+
+                    var rects = svg.selectAll("rect")
+                                   .data(rows)
+                                   .enter()
+                                   .append("rect")
+                                   .attr("class", "bar");
+
+                    tip = d3.tip()
+                            .attr('class', 'd3-tip')
+                            .html(function(d){return Object.values(d)[6] + "%"});
+
                     svg.call(tip)
 
                     // Make shapes by calculating x, y, height and width
@@ -114,12 +138,12 @@
 
                     // Calculate scales for creating axes (can also be used to scale x and y values)
                     var xScale = d3.scaleLinear()
-                                         .domain([d3.min(years), d3.max(years)])
-                                         .range([PADDING_LEFT, WIDTH]);
+                                   .domain([d3.min(years), d3.max(years)])
+                                   .range([PADDING_LEFT, WIDTH]);
 
                     var yScale = d3.scaleLinear()
-                                         .domain([MAX, 0])
-                                         .range([PADDING_DOWN,HEIGHT]);
+                                   .domain([MAX, 0])
+                                   .range([PADDING_DOWN,HEIGHT]);
 
                     // Create axes
                     var xAxis = d3.axisBottom(xScale);
@@ -145,11 +169,11 @@
 
                     // Create yAxis Label in visually appealing location
                     svg.append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 0 + 20)
-                    .attr("x", 0 - (HEIGHT- 150))
-                    .attr("class", "text")
-                    .text("% Renewable Energy as Part of Total");
+                       .attr("transform", "rotate(-90)")
+                       .attr("y", 0 + 20)
+                       .attr("x", 0 - (HEIGHT- 150))
+                       .attr("class", "text")
+                       .text("% Renewable Energy as Part of Total");
           }
         }
         txtFile.open("GET", fileName);
