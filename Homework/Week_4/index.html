@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!-- Corné Heijnen (12230170) -->
 <!-- Assignment 4 Data Processing -->
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>D3 Corné</title>
         <script type="text/javascript" src="d3/d3.js">
-          d3.select("head").append("title").text("The Amount of Renewable Energy in Belgium from 1960 to 2016");
+        d3.select("head").append("title").text("Future bar chart page");
         </script>
         <style>
         .title {
@@ -45,20 +45,31 @@
         }
         </style>
     </head>
+
     <body>
+
+      <!-- Include d3-tip usage -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
         <script type="text/javascript">
+
+            // Set title of webpage and create text
+            d3.select("head").append("title").text("Bar Chart");
+            d3.select("body").append("h1").text("The Amount of Renewable Energy in Belgium from 1960 to 2016").attr("class", "title");
+            d3.select("body").append("h3").text("By Corné Heijnen (12230170)").attr("class", "subtitle");
+            d3.select("body").append("p").text("Thi graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members. This graph shows the evolution of percentual use of renewable energy as part of the total energy production.").attr("class", "text");
+
             // import and pare json file
             var fileName = "data.json";
             var txtFile = new XMLHttpRequest();
             txtFile.onreadystatechange = function() {
                 if (txtFile.readyState === 4 && txtFile.status == 200) {
 
-                    // Save all data in variable rows and select subset
+                    // Save all data in variable rows and select subset of interest
+                    // The relative use of renewable energy in Belgium
                     rows = JSON.parse(txtFile.responseText);
                     rows = rows.slice(2223,2280);
 
-                    // Loop over rows to get list of values to calculate max
+                    // Loop over rows to get list of keys and values to calculate max
                     var values = Object.values(rows);
                     var values_inpt = [];
                     var years = [];
@@ -70,7 +81,6 @@
                       years.push(year);
                     })
 
-
                     // Set constants for layout of bar graph
                     const HEIGHT = 550;
                     const WIDTH = 1000;
@@ -79,16 +89,9 @@
                     const BARPADDING = 1;
                     var MAX = Math.max(... values_inpt);
 
-                    d3.select("body").append("h1").text("The Amount of Renewable Energy in Belgium from 1960 to 2016").attr("class", "title");
-                    d3.select("body").append("h3").text("By Corné Heijnen (12230170)").attr("class", "subtitle");
-                    d3.select("body").append("p").text("Thi graph shows data from the OECD on the amount of renewable energy each year. The OECD is the Organisation for Economic Cooperation and Development and is an organisation of 36 countries focussing on economic progres and world trade. The data is to show the increae in renewable energy for all its members. This graph shows the evolution of percentual use of renewable energy as part of the total energy production.").attr("class", "text");
-
-                    // Create SVG
+                    // Create SVG, bars and tip
                     var svg = d3.select("body").append("svg").attr("width", WIDTH).attr("height", HEIGHT);
-
-                    // Create variable for shapess
                     var rects = svg.selectAll("rect").data(rows).enter().append("rect").attr("class", "bar");
-
                     tip = d3.tip().attr('class', 'd3-tip').html(function(d){return Object.values(d)[6] + "%"});
                     svg.call(tip)
 
@@ -103,9 +106,13 @@
                          .attr("height", function(d){
                            return Object.values(d)[6]/MAX * (HEIGHT-PADDING_DOWN);
                          })
+
+                         // Make use of appearing tip on mouse movement
                          .on('mouseover', tip.show)
                          .on('mouseout', tip.hide)
 
+
+                    // Calculate scales for creating axes (can also be used to scale x and y values)
                     var xScale = d3.scaleLinear()
                                          .domain([d3.min(years), d3.max(years)])
                                          .range([PADDING_LEFT, WIDTH]);
@@ -114,33 +121,35 @@
                                          .domain([MAX, 0])
                                          .range([PADDING_DOWN,HEIGHT]);
 
+                    // Create axes
                     var xAxis = d3.axisBottom(xScale);
                     var yAxis = d3.axisLeft(yScale);
 
+                    // Show xAxis on SVG
                     svg.append("g")
                        .attr("transform", "translate(0," + (HEIGHT - PADDING_DOWN) + ")")
                        .attr("class", "text")
                        .call(xAxis);
 
+                    // Create xAxis label years in visually pleasing location
                     svg.append("text")
                        .attr("transform", "translate(" + (WIDTH/2) + "," + (HEIGHT - PADDING_DOWN + 40) + ")")
                        .attr("class", "text")
                        .text("Years");
 
+                    // Create yAxis on SVG
                     svg.append("g")
-                       .attr("transform", "translate(" + PADDING_LEFT + ",-50)")
+                       .attr("transform", "translate(" + PADDING_LEFT + "-" + PADDING_DOWN + ")")
                        .attr("class", "text")
                        .call(yAxis);
 
+                    // Create yAxis Label in visually appealing location
                     svg.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", 0 + 20)
                     .attr("x", 0 - (HEIGHT- 150))
                     .attr("class", "text")
                     .text("% Renewable Energy as Part of Total");
-
-              // Make graph interactive
-
           }
         }
         txtFile.open("GET", fileName);
