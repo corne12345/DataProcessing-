@@ -1,5 +1,8 @@
 // Corné Heijnen
 // 12230170
+// NB: Since I've been ill for a few days, I wasn't able to finish the project entirely. This version
+// contains everything up until the legend part. There has also been little work done in terms of layout
+// of the html page or the graph and the code has not been optimized yet.
 
 var width = 500;
 var height = 500;
@@ -26,8 +29,6 @@ window.onload = function() {
   }).catch(function(e){
       throw(e);
   });
-
-
 
   // Function provided by https://data.mprog.nl/course/10%20Homework/100%20D3%20Scatterplot/scripts/transformResponseV1.js
   function transformResponse(data){
@@ -85,7 +86,6 @@ window.onload = function() {
         });
     });
 
-
     // return the finished product!
     return dataArray;
 }
@@ -118,6 +118,7 @@ function createSVG(dataset){
   var xMin = Math.min(... x_values);
   var xMax = Math.max(... x_values);
 
+  // ColorBrewer was used to select hte colors (http://colorbrewer2.org/#type=qualitative&scheme=Paired&n=9)
   var colors = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "fdbf6f", "ff7f00", "#cab2d6"];
 
   //Create SVG element
