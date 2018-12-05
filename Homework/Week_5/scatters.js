@@ -118,11 +118,7 @@ function createSVG(dataset){
   var xMin = Math.min(... x_values);
   var xMax = Math.max(... x_values);
 
-  var datasetClean = [];
-  for (var count = 0; count < dataset.length; count++){
-    var temp = [dataset[count][2], dataset[count][3]]
-    datasetClean.push(temp);
-  }
+  var colors = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "fdbf6f", "ff7f00", "#cab2d6"];
 
   //Create SVG element
   var svg = d3.select("body")
@@ -131,16 +127,17 @@ function createSVG(dataset){
               .attr("height", height);
 
   svg.selectAll("circle")
-  .data(datasetClean)
+  .data(dataset)
   .enter()
   .append("circle")
   .attr("cx", function(d) {
-          return ((d[0]-xMin)/(xMax-xMin)) * (width - 2 * padding) + padding;
+          return ((d[2]-xMin)/(xMax-xMin)) * (width - 2 * padding) + padding;
     })
     .attr("cy", function(d) {
-         return ((d[1]-yMin)/(yMax-yMin)) * (width - 2 * padding) + padding;
+         return ((d[3]-yMin)/(yMax-yMin)) * (width - 2 * padding) + padding;
     })
-    .attr("r", 5);
+    .attr("r", 5)
+    .attr("fill", function (d) {return colors[d[0] - 2007]});
 
     var xScale = d3.scaleLinear()
                    .domain([xMin, xMax])
@@ -179,6 +176,20 @@ function createSVG(dataset){
        .attr("x", 0 - (height- 150))
        .attr("class", "text")
        .text("% Female researchers");
+
+    // Create title
+    svg.append("text")
+       .attr("y", 20)
+       .attr("x", width / 2 - 100)
+       .attr("class", "text")
+       .text("Female researchers vs. consumer confidence")
+
+    const legend = svg.append("g")
+                      .attr("transform",
+           "translate(" + (width + padding) +
+           "," + (height / 2) + ")"
+         );
+
 
 }
 }
