@@ -11,8 +11,8 @@ var svg;
 
 window.onload = function() {
   // Only countries with no missing data are added in this list (Netherlands, Great Britain and Germany are taken out)
-  var linkData = "http://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+KOR+PRT/all?startTime=2007&endTime=2015"
-  var consConf = "http://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+KOR+PRT.COCONF.A/all?startTime=2007&endTime=2015"
+  var linkData = "https://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+KOR+PRT/all?startTime=2007&endTime=2015"
+  var consConf = "https://stats.oecd.org/SDMX-JSON/data/HH_DASH/FRA+KOR+PRT.COCONF.A/all?startTime=2007&endTime=2015"
   var response = [d3.json(linkData), d3.json(consConf)]
 
   Promise.all(response).then(function(response) {
