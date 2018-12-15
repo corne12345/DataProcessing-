@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- Corné Heijnen (12230170)
+Assignment Linked Views DataProcessing -->
+
+<html lang="en">
+  <head>
+    <meta charset ="utf-8">
+    <title> World Happiness </title>
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="d3-tip.js"></script>
+  </head>
+
+<body>
+  <h1>World Happiness and its contributors </h1>
+  <h3>by Corné Heijnen (12230170)</h2>
+  <p></p>
+  <p>data retrieved from
+  <a href= 'http://stats.oecd.org/SDMX-JSON/data/MSTI_PUB/TH_WRXRS.FRA+KOR+PRT/all?startTime=2007&endTime=2015'> Kaggle  </a></p>
+  <p> This is a multi-linked view representing the happiness for all countries in the world. Hovering over the countries will reveal its overall happiness and its relative rank in the world. Moreover, the country's colors will be scaled according to the happiness. When a country is clicked, a pie chart for this country will be showed. This pie chart displays the contributions of a few standard contributors to the happiness score.</p>
+  <p></p>
+  <script src="worldMap.js"></script>
+  <p>Part of the course DataProcessing at the University of Amsterdam </p>
+</body>
+</html>
