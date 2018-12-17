@@ -72,7 +72,7 @@ function ready(error, data, happiness) {
       .data(data.features)
     .enter().append("path")
       .attr("d", path)
-      .style("fill", function(d){try{var temp = happinessByName[d.id]; return thresholdScale(temp["Happiness"])}catch{return thresholdScale(99)}})
+      .style("fill", function(d){try{var temp = happinessByName[d.id]; return thresholdScale(temp["Happiness"])} catch{return thresholdScale(99)}})
       .style('stroke', 'white')
       .style('stroke-width', 1.5)
       .style("opacity",0.8)
